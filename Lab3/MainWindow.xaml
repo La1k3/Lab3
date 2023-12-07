@@ -7,6 +7,12 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <TextBox Name="brand1" HorizontalAlignment="Left" Height="23" Margin="10,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>
+        <TextBox Name="color1" HorizontalAlignment="Left" Height="23" Margin="10,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>
+        <TextBox Name="fuel1" HorizontalAlignment="Left" Height="23" Margin="10,192,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>
+        <Label Content="Marka" HorizontalAlignment="Left" Margin="48,20,0,0" VerticalAlignment="Top"/>
+        <Label Content="Kolor" HorizontalAlignment="Left" Margin="53,91,0,0" VerticalAlignment="Top"/>
+        <Label Content="Paliwo" HorizontalAlignment="Left" Margin="48,161,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="wynik" HorizontalAlignment="Left" Height="23" Margin="10,370,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="772"/>
     </Grid>
 </Window>

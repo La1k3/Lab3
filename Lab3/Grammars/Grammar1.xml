@@ -1,0 +1,110 @@
+﻿<grammar version="1.0" xml:lang="pl-PL" root="rootRule"
+xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+	<rule id="rootRule">
+		<one-of>
+			<item>
+				<item repeat="0-1"> Chce </item>
+				<ruleref uri="#brand" />
+				<tag> out.brand=rules.latest(); </tag>
+				<ruleref uri="#color" />
+				<tag> out.color=rules.latest(); </tag>
+				<ruleref uri="#fuel" />
+				<tag> out.fuel=rules.latest(); </tag>
+			</item>
+			<item>
+				<item repeat="0-1"> Chce </item>
+				<ruleref uri="#brand" />
+				<tag> out.brand=rules.latest(); </tag>
+				<ruleref uri="#color" />
+				<tag> out.color=rules.latest(); </tag>
+			</item>
+			<item>
+				<item repeat="0-1"> Chce </item>
+				<ruleref uri="#color" />
+				<tag> out.color=rules.latest(); </tag>
+				<ruleref uri="#fuel" />
+				<tag> out.fuel=rules.latest(); </tag>
+			</item>
+			<item>
+				<item repeat="0-1"> Chce </item>
+				<ruleref uri="#brand" />
+				<tag> out.brand=rules.latest(); </tag>
+			</item>
+			<item>
+				<item repeat="0-1"> Chce </item>
+				<ruleref uri="#color" />
+				<tag> out.color=rules.latest(); </tag>
+			</item>
+		</one-of>
+	</rule>
+
+	<rule id="brand">
+		<one-of>
+			<item>
+				BMW <tag> out="BMW";</tag>
+			</item>
+			<item>
+				Audi <tag> out="audi"; </tag>
+			</item>
+			<item>
+				KIA <tag> out="kia"; </tag>
+			</item>
+			<item>
+				Subaru <tag> out="subaru"; </tag>
+			</item>
+			<item>
+				Seat <tag> out="seat";</tag>
+			</item>
+			<item>
+				Honda <tag> out="honda"; </tag>
+			</item>
+			<item>
+				Ford <tag> out="ford"; </tag>
+			</item>
+			<item>
+				Opel <tag> out="opel"; </tag>
+			</item>
+			<item>
+				Reno <tag> out="renault"; </tag>
+			</item>
+			<item>
+				Citroen <tag> out="citroen"; </tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="color">
+		<one-of>
+			<item>
+				czarny <tag>out="czarny"</tag>
+			</item>
+			<item>
+				biały <tag>out="biały"</tag>
+			</item>
+			<item>
+				niebieski <tag>out="niebieski"</tag>
+			</item>
+			<item>
+				zielony <tag>out="zielony"</tag>
+			</item>
+			<item>
+				żółty <tag>out="żółty"</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="fuel">
+		<one-of>
+			<item>
+				benzyna <tag> out="benzyna";</tag>
+			</item>
+			<item>
+				disel <tag> out="diesel"; </tag>
+			</item>
+			<item>
+				elektryk <tag> out="elektryk"; </tag>
+			</item>
+			<item>
+				hybryda <tag> out="hybryda"; </tag>
+			</item>
+		</one-of>
+	</rule>
+</grammar>
