@@ -1,0 +1,31 @@
+﻿<grammar version="1.0" xml:lang="pl-PL" root="rootRule"
+xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+
+	<rule id="rootRule">
+		<item>
+			<item repeat="0-1"> Chce </item>
+			<ruleref uri="#color" />
+			<tag> out.color=rules.latest(); </tag>
+		</item>
+	</rule>
+
+	<rule id="color">
+		<one-of>
+			<item>
+				czarny <tag>out="czarny"</tag>
+			</item>
+			<item>
+				biały <tag>out="biały"</tag>
+			</item>
+			<item>
+				niebieski <tag>out="niebieski"</tag>
+			</item>
+			<item>
+				zielony <tag>out="zielony"</tag>
+			</item>
+			<item>
+				żółty <tag>out="żółty"</tag>
+			</item>
+		</one-of>
+	</rule>
+</grammar>

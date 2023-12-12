@@ -119,6 +119,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Grammars\Grammar2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Grammars\Grammar1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
