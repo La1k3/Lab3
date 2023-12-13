@@ -3,28 +3,18 @@ xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
 
 	<rule id="rootRule">
 		<item>
-			<item repeat="0-1"> Chce </item>
-			<ruleref uri="#color" />
-			<tag> out.color=rules.latest(); </tag>
+			<ruleref uri="#yes_no" />
+			<tag> out.yes_no=rules.latest(); </tag>
 		</item>
 	</rule>
 
-	<rule id="color">
+	<rule id="yes_no">
 		<one-of>
 			<item>
-				czarny <tag>out="czarny"</tag>
+				tak <tag>out="tak"</tag>
 			</item>
 			<item>
-				biały <tag>out="biały"</tag>
-			</item>
-			<item>
-				niebieski <tag>out="niebieski"</tag>
-			</item>
-			<item>
-				zielony <tag>out="zielony"</tag>
-			</item>
-			<item>
-				żółty <tag>out="żółty"</tag>
+				nie <tag>out="nie"</tag>
 			</item>
 		</one-of>
 	</rule>

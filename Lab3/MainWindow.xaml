@@ -14,5 +14,8 @@
         <Label Content="Kolor" HorizontalAlignment="Left" Margin="53,91,0,0" VerticalAlignment="Top"/>
         <Label Content="Paliwo" HorizontalAlignment="Left" Margin="48,161,0,0" VerticalAlignment="Top"/>
         <TextBox Name="wynik" HorizontalAlignment="Left" Height="23" Margin="10,370,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="772"/>
+        <Label Content="Marki: BMW, audi, kia, subaru, seat,honda,ford, opel, renault, citroen." HorizontalAlignment="Left" Margin="292,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Kolory: czarny, biały, niebieski, zielony, żółty." HorizontalAlignment="Left" Margin="292,36,0,0" VerticalAlignment="Top"/>
+        <Label Content="Rodzaj silnika: benzyna, diesel, elektryk, hybryda." HorizontalAlignment="Left" Margin="292,67,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

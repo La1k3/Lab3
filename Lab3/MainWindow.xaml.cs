@@ -27,9 +27,6 @@ namespace Lab3
         private readonly BackgroundWorker worker = new BackgroundWorker();
         static SpeechSynthesizer ss;
         static SpeechRecognitionEngine sre;
-        int brand = 0;
-        int color = 0;
-        int engine = 0;
 
         public MainWindow()
         {
@@ -40,7 +37,6 @@ namespace Lab3
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-
             ss = new SpeechSynthesizer();
             ss.SetOutputToDefaultAudioDevice();
             ss.Speak("Witam w salonie samochodowym. Jaki samochód Pan sobie życzy");
@@ -75,8 +71,9 @@ namespace Lab3
                     setColor(e);
                     setFuel(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
-                    ss.Speak("Cały samochód ma konfigurację");
-                }else if (brand && color)
+                    orderEnd(sre, e);
+                }
+                else if (brand && color)
                 {
                     setBrand(e);
                     setColor(e);
@@ -137,6 +134,7 @@ namespace Lab3
             if (confidence > 0.7)
             {
                 setColor(e);
+                orderEnd(sre, e);
             }
             else
             {
@@ -153,6 +151,7 @@ namespace Lab3
             if (confidence > 0.7)
             {
                 setFuel(e);
+                orderEnd(sre, e);
             }
             else
             {
@@ -169,6 +168,7 @@ namespace Lab3
             if (confidence > 0.7)
             {
                 setBrand(e);
+                orderEnd(sre, e);
             }
             else
             {
@@ -190,6 +190,7 @@ namespace Lab3
                 {
                     setColor(e);
                     setFuel(e);
+                    orderEnd(sre, e);
                 }
                 else if (e.Result.Semantics.ContainsKey("color"))
                 {
@@ -226,6 +227,7 @@ namespace Lab3
                 {
                     setBrand(e);
                     setColor(e);
+                    orderEnd(sre, e);
                 }
                 else if (e.Result.Semantics.ContainsKey("brand"))
                 {
@@ -262,6 +264,7 @@ namespace Lab3
                 {
                     setBrand(e);
                     setFuel(e);
+                    orderEnd(sre, e);
                 }
                 else if (e.Result.Semantics.ContainsKey("brand"))
                 {
@@ -309,6 +312,71 @@ namespace Lab3
             Dispatcher.Invoke(() => {
                 fuel1.Text = fuel;
             });
+        }
+
+        private void orderEnd(SpeechRecognitionEngine sre, SpeechRecognizedEventArgs e)
+        {
+            sre.UnloadAllGrammars();
+            ss.Speak("Posiadam już wszystkie informacje.");
+            string brand = e.Result.Semantics["brand"].Value.ToString();
+            string color = e.Result.Semantics["color"].Value.ToString();
+            string fuel = e.Result.Semantics["fuel"].Value.ToString();
+            Dispatcher.Invoke(() => {
+                wynik.Text = "Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + fuel;
+            });
+            ss.Speak("Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + fuel);
+            Choices ch_yesno = new Choices();
+            ch_yesno.Add("Tak");
+            ch_yesno.Add("Nie");
+            GrammarBuilder yesno = new GrammarBuilder();
+            yesno.Append(ch_yesno);
+            Grammar yesno_grammar = new Grammar(yesno);
+            sre.LoadGrammar(yesno_grammar);
+            /*Grammar grammar1 = new Grammar(".\\Grammars\\Grammar2.xml", "rootRule");
+            grammar1.Enabled = true;
+            sre.LoadGrammarAsync(grammar1);*/
+            sre.SpeechRecognized += Sre_SpeechRecognized_End;
+            ss.Speak("Czy Twoje zamówienie się zgadza? Tak czy nie?");
+        }
+
+        private void Sre_SpeechRecognized_End(object sender, SpeechRecognizedEventArgs e)
+        {
+            string txt = e.Result.Text;
+            float confidence = e.Result.Confidence;
+            if (confidence > 0.7)
+            {
+                if (txt.IndexOf("Tak") >= 0)
+                {
+                    ss.Speak("Postępuj zgodnie z poleceniami terminala. Do zobaczenia.");
+                    this.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        MainWindow mw = new MainWindow();
+                        sre.Dispose();
+                        ss.Dispose();
+                        this.Close();
+                        Application.Current.Shutdown();
+                    }));
+                }
+                else if (txt.IndexOf("Nie") >= 0)
+                {
+                    ss.Speak("Wracam od początku.");
+                    this.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        sre.UnloadAllGrammars();
+                        sre.SpeechRecognized -= Sre_SpeechRecognized_End;
+                        MainWindow mw = new MainWindow();
+                        mw.Show();
+                        this.Close();
+                    }));
+                }
+            }
+            else
+            {
+                ss.Speak("Proszę powtórzyć.");
+                Dispatcher.Invoke(() => {
+                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
+                });
+            }
         }
 
         /*sre.UnloadAllGrammars();
