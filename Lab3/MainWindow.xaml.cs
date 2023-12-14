@@ -27,6 +27,9 @@ namespace Lab3
         private readonly BackgroundWorker worker = new BackgroundWorker();
         static SpeechSynthesizer ss;
         static SpeechRecognitionEngine sre;
+        string brand;
+        string color;
+        string fuel;
 
         public MainWindow()
         {
@@ -67,53 +70,53 @@ namespace Lab3
                 }
                 if (brand && color && fuel)
                 {
-                    setBrand(e);
-                    setColor(e);
-                    setFuel(e);
+                    SetBrand(e);
+                    SetColor(e);
+                    SetFuel(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
-                    orderEnd(sre, e);
+                    orderEnd(sre);
                 }
                 else if (brand && color)
                 {
-                    setBrand(e);
-                    setColor(e);
+                    SetBrand(e);
+                    SetColor(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     ss.Speak("Proszę podać rodzaj paliwa samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Fuel;
                 }
                 else if (brand && fuel)
                 {
-                    setBrand(e);
-                    setFuel(e);
+                    SetBrand(e);
+                    SetFuel(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     ss.Speak("Proszę podać kolor samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Color;
                 }
                 else if (color && fuel)
                 {
-                    setColor(e);
-                    setFuel(e);
+                    SetColor(e);
+                    SetFuel(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     ss.Speak("Proszę podać markę samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Brand;
                 }
                 else if (brand)
                 {
-                    setBrand(e);
+                    SetBrand(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     ss.Speak("Proszę podać kolor i rodzaj paliwa samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Color_Fuel;
                 }
                 else if (color)
                 {
-                    setColor(e);
+                    SetColor(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     ss.Speak("Proszę podać markę i rodzaj paliwa samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Brand_Fuel;
                 }
                 else if (fuel)
                 {
-                    setFuel(e);
+                    SetFuel(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     ss.Speak("Proszę podać markę i rodzaj paliwa samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Brand_Color;
@@ -121,10 +124,7 @@ namespace Lab3
             }
             else
             {
-                ss.Speak("Proszę powtórzyć");
-                Dispatcher.Invoke(() => {
-                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-                });
+                repeat(confidence);
             }
         }
 
@@ -133,15 +133,13 @@ namespace Lab3
             float confidence = e.Result.Confidence;
             if (confidence > 0.7)
             {
-                setColor(e);
-                orderEnd(sre, e);
+                SetColor(e);
+                sre.SpeechRecognized -= Sre_SpeechRecognized_Color;
+                orderEnd(sre);
             }
             else
             {
-                ss.Speak("Proszę powtórzyć");
-                Dispatcher.Invoke(() => {
-                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-                });
+                repeat(confidence);
             }
         }
 
@@ -150,15 +148,13 @@ namespace Lab3
             float confidence = e.Result.Confidence;
             if (confidence > 0.7)
             {
-                setFuel(e);
-                orderEnd(sre, e);
+                SetFuel(e);
+                sre.SpeechRecognized -= Sre_SpeechRecognized_Fuel;
+                orderEnd(sre);
             }
             else
             {
-                ss.Speak("Proszę powtórzyć");
-                Dispatcher.Invoke(() => {
-                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-                });
+                repeat(confidence);
             }
         }
 
@@ -167,15 +163,13 @@ namespace Lab3
             float confidence = e.Result.Confidence;
             if (confidence > 0.7)
             {
-                setBrand(e);
-                orderEnd(sre, e);
+                SetBrand(e);
+                sre.SpeechRecognized -= Sre_SpeechRecognized_Brand;
+                orderEnd(sre);
             }
             else
             {
-                ss.Speak("Proszę powtórzyć");
-                Dispatcher.Invoke(() => {
-                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-                });
+                repeat(confidence);
             }
         }
 
@@ -188,20 +182,21 @@ namespace Lab3
                 bool fuel = e.Result.Semantics.ContainsKey("fuel");
                 if (e.Result.Semantics.ContainsKey("color") && e.Result.Semantics.ContainsKey("fuel"))
                 {
-                    setColor(e);
-                    setFuel(e);
-                    orderEnd(sre, e);
+                    SetColor(e);
+                    SetFuel(e);
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Fuel;
+                    orderEnd(sre);
                 }
                 else if (e.Result.Semantics.ContainsKey("color"))
                 {
-                    setColor(e);
+                    SetColor(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Fuel;
                     ss.Speak("Proszę podać rodzaj paliwa samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Fuel;
                 }
                 else if (e.Result.Semantics.ContainsKey("fuel"))
                 {
-                    setFuel(e);
+                    SetFuel(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Fuel;
                     ss.Speak("Proszę podać kolor samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Color;
@@ -209,10 +204,7 @@ namespace Lab3
             }
             else
             {
-                ss.Speak("Proszę powtórzyć");
-                Dispatcher.Invoke(() => {
-                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-                });
+                repeat(confidence);
             }
         }
 
@@ -225,20 +217,21 @@ namespace Lab3
                 bool color = e.Result.Semantics.ContainsKey("color");
                 if (e.Result.Semantics.ContainsKey("brand") && e.Result.Semantics.ContainsKey("color"))
                 {
-                    setBrand(e);
-                    setColor(e);
-                    orderEnd(sre, e);
+                    SetBrand(e);
+                    SetColor(e);
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Color;
+                    orderEnd(sre);
                 }
                 else if (e.Result.Semantics.ContainsKey("brand"))
                 {
-                    setBrand(e);
+                    SetBrand(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Color;
                     ss.Speak("Proszę podać kolor samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Color;
                 }
                 else if (e.Result.Semantics.ContainsKey("color"))
                 {
-                    setColor(e);
+                    SetColor(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Color;
                     ss.Speak("Proszę podać markę samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Brand;
@@ -246,10 +239,7 @@ namespace Lab3
             }
             else
             {
-                ss.Speak("Proszę powtórzyć");
-                Dispatcher.Invoke(() => {
-                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-                });
+                repeat(confidence);
             }
         }
 
@@ -262,20 +252,21 @@ namespace Lab3
                 bool fuel = e.Result.Semantics.ContainsKey("fuel");
                 if (e.Result.Semantics.ContainsKey("brand") && e.Result.Semantics.ContainsKey("fuel"))
                 {
-                    setBrand(e);
-                    setFuel(e);
-                    orderEnd(sre, e);
+                    SetBrand(e);
+                    SetFuel(e);
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Fuel;
+                    orderEnd(sre);
                 }
                 else if (e.Result.Semantics.ContainsKey("brand"))
                 {
-                    setBrand(e);
+                    SetBrand(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Fuel;
                     ss.Speak("Proszę podać rodzaj paliwa samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Fuel;
                 }
                 else if (e.Result.Semantics.ContainsKey("fuel"))
                 {
-                    setFuel(e);
+                    SetFuel(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Fuel;
                     ss.Speak("Proszę podać markę samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Brand;
@@ -283,48 +274,53 @@ namespace Lab3
             }
             else
             {
-                ss.Speak("Proszę powtórzyć");
+                repeat(confidence);
+            }
+        }
+
+        private void repeat(float confidence)
+        {
+            ss.Speak("Proszę powtórzyć");
+            Dispatcher.Invoke(() => {
+                wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
+            });
+        }
+
+        private void SetBrand(SpeechRecognizedEventArgs e)
+        {
+            if (e.Result.Semantics.ContainsKey("brand"))
+            {
+                brand = e.Result.Semantics["brand"].Value.ToString();
                 Dispatcher.Invoke(() => {
-                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
+                    brand1.Text = brand;
                 });
             }
         }
 
-        private void setBrand(SpeechRecognizedEventArgs e)
+        private void SetColor(SpeechRecognizedEventArgs e)
         {
-            string brand = e.Result.Semantics["brand"].Value.ToString();
-            Dispatcher.Invoke(() => {
-                brand1.Text = brand;
-            }); 
-        }
-
-        private void setColor(SpeechRecognizedEventArgs e)
-        {
-            string color = e.Result.Semantics["color"].Value.ToString();
+            color = e.Result.Semantics["color"].Value.ToString();
             Dispatcher.Invoke(() => {
                 color1.Text = color;
             });
         }
 
-        private void setFuel(SpeechRecognizedEventArgs e)
+        private void SetFuel(SpeechRecognizedEventArgs e)
         {
-            string fuel = e.Result.Semantics["fuel"].Value.ToString();
+            fuel = e.Result.Semantics["fuel"].Value.ToString();
             Dispatcher.Invoke(() => {
                 fuel1.Text = fuel;
             });
         }
 
-        private void orderEnd(SpeechRecognitionEngine sre, SpeechRecognizedEventArgs e)
+        private void orderEnd(SpeechRecognitionEngine sre)
         {
             sre.UnloadAllGrammars();
             ss.Speak("Posiadam już wszystkie informacje.");
-            string brand = e.Result.Semantics["brand"].Value.ToString();
-            string color = e.Result.Semantics["color"].Value.ToString();
-            string fuel = e.Result.Semantics["fuel"].Value.ToString();
             Dispatcher.Invoke(() => {
-                wynik.Text = "Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + fuel;
+                wynik.Text = "Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + fuel + ".";
             });
-            ss.Speak("Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + fuel);
+            ss.Speak("Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + fuel + ".");
             Choices ch_yesno = new Choices();
             ch_yesno.Add("Tak");
             ch_yesno.Add("Nie");
@@ -372,122 +368,8 @@ namespace Lab3
             }
             else
             {
-                ss.Speak("Proszę powtórzyć.");
-                Dispatcher.Invoke(() => {
-                    wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-                });
+                repeat(confidence);
             }
         }
-
-        /*sre.UnloadAllGrammars();
-        Grammar grammar1 = new Grammar(".\\Grammars\\Grammar1.xml", "choseColor");
-        grammar.Enabled = true;
-        sre.LoadGrammarAsync(grammar1);*/
-
-        /*private void Sre_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
-        {
-            float confidence = e.Result.Confidence;
-            List<TextBox> textBoxesToChange = new List<TextBox> { brand1, color1, fuel1 };
-            int check = 0;
-            if (confidence > 0.7)
-            {
-                foreach (var textBox in textBoxesToChange)
-                {
-                    textBox.Text = null;
-                }
-                if (e.Result.Semantics.ContainsKey("brand") && e.Result.Semantics.ContainsKey("fuel"))
-                {
-                    check += 1;
-                    string brand = e.Result.Semantics["brand"].Value.ToString();
-                    brand1.Text = brand;
-                    sre.SpeechRecognized -= Sre_SpeechRecognized;
-                    sre.UnloadAllGrammars();
-                    Grammar grammar1 = new Grammar(".\\Grammars\\Grammar2.xml", "rootRule");
-                    //grammar1.Enabled = true;
-                    sre.LoadGrammarAsync(grammar1);
-                    sre.SpeechRecognized += Sre_SpeechRecognized2;
-                    ss.Speak("Proszę podać kolor samochodu");
-                }
-                else
-                {
-                    ss.Speak("Proszę podać markę samochodu");
-                }
-                if (e.Result.Semantics.ContainsKey("color"))
-                {
-                    string color = e.Result.Semantics["color"].Value.ToString();
-                    color1.Text = color;
-                }
-                else
-                {
-                    ss.Speak("Proszę podać kolor samochodu");
-                }
-                if (e.Result.Semantics.ContainsKey("fuel"))
-                {
-                    string fuel = e.Result.Semantics["fuel"].Value.ToString();
-                    fuel1.Text = fuel;
-                }
-                else
-                {
-                    ss.Speak("Proszę podać rodzaj paliwa samochodu");
-                }
-            }
-            else
-            {
-                ss.Speak("Proszę powtórzyć");
-                wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-            }
-        }*/
-
-        /*private void Sre_SpeechRecognized2(object sender, SpeechRecognizedEventArgs e)
-        {
-            float confidence = e.Result.Confidence;
-            if (confidence > 0.7)
-            {
-                string color = e.Result.Semantics["color"].Value.ToString();
-                Dispatcher.Invoke(() => {
-                    color1.Text = color;
-                });
-                // Przykładowy kod
-                ss.Speak("Sre_SpeechRecognized2 działa");
-            }
-            else
-            {
-                ss.Speak("to dziala");
-            }
-        }
-
-        private void Sre_SpeechRecognized1(object sender, SpeechRecognizedEventArgs e)
-        {
-            float confidence = e.Result.Confidence;
-            List<TextBox> textBoxesToChange = new List<TextBox> { brand1, color1, fuel1 };
-            if (confidence > 0.7)
-            {
-                if (e.Result.Semantics.ContainsKey("color"))
-                {
-                    string color = e.Result.Semantics["color"].Value.ToString();
-                    color1.Text = color;
-                }
-                else
-                {
-                    ss.Speak("Proszę podać kolor samochodu");
-                }
-                if (e.Result.Semantics.ContainsKey("fuel"))
-                {
-                    string fuel = e.Result.Semantics["fuel"].Value.ToString();
-                    fuel1.Text = fuel;
-                }
-                else
-                {
-                    ss.Speak("Proszę podać rodzaj paliwa samochodu");
-                }
-            }
-            else
-            {
-                ss.Speak("Proszę powtórzyć");
-                wynik.Text = "Proszę powtórzyć, ponieważ rozpoznawanie wynosi: " + confidence;
-                ss.Speak("Proszę podać markę, kolor i rodzaj silnika samochodu");
-            }
-        }*/
-
     }
 }
