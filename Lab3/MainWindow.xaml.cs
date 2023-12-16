@@ -25,11 +25,11 @@ namespace Lab3
     public partial class MainWindow : Window
     {
         private readonly BackgroundWorker worker = new BackgroundWorker();
-        static SpeechSynthesizer ss;
-        static SpeechRecognitionEngine sre;
-        string brand;
-        string color;
-        string fuel;
+        private static SpeechSynthesizer ss;
+        private static SpeechRecognitionEngine sre;
+        private string brand;
+        private string color;
+        private string engine;
 
         public MainWindow()
         {
@@ -56,10 +56,10 @@ namespace Lab3
         private void Sre_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             float confidence = e.Result.Confidence;
-            List<TextBox> textBoxesToChange = new List<TextBox> { brand1, color1, fuel1 };
+            List<TextBox> textBoxesToChange = new List<TextBox> { brand1, color1, engine1 };
             bool brand = e.Result.Semantics.ContainsKey("brand");
             bool color = e.Result.Semantics.ContainsKey("color");
-            bool fuel = e.Result.Semantics.ContainsKey("fuel");
+            bool engine = e.Result.Semantics.ContainsKey("engine");
             if (confidence > 0.7)
             {
                 foreach (var textBox in textBoxesToChange)
@@ -68,11 +68,11 @@ namespace Lab3
                         textBox.Text = null;
                     });
                 }
-                if (brand && color && fuel)
+                if (brand && color && engine)
                 {
                     SetBrand(e);
                     SetColor(e);
-                    SetFuel(e);
+                    SetEngine(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     orderEnd(sre);
                 }
@@ -81,21 +81,21 @@ namespace Lab3
                     SetBrand(e);
                     SetColor(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
-                    ss.Speak("Proszę podać rodzaj paliwa samochodu");
-                    sre.SpeechRecognized += Sre_SpeechRecognized_Fuel;
+                    ss.Speak("Proszę podać rodzaj silnika samochodu");
+                    sre.SpeechRecognized += Sre_SpeechRecognized_Engine;
                 }
-                else if (brand && fuel)
+                else if (brand && engine)
                 {
                     SetBrand(e);
-                    SetFuel(e);
+                    SetEngine(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     ss.Speak("Proszę podać kolor samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Color;
                 }
-                else if (color && fuel)
+                else if (color && engine)
                 {
                     SetColor(e);
-                    SetFuel(e);
+                    SetEngine(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
                     ss.Speak("Proszę podać markę samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Brand;
@@ -104,21 +104,21 @@ namespace Lab3
                 {
                     SetBrand(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
-                    ss.Speak("Proszę podać kolor i rodzaj paliwa samochodu");
-                    sre.SpeechRecognized += Sre_SpeechRecognized_Color_Fuel;
+                    ss.Speak("Proszę podać kolor i rodzaj silnika samochodu");
+                    sre.SpeechRecognized += Sre_SpeechRecognized_Color_Engine;
                 }
                 else if (color)
                 {
                     SetColor(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
-                    ss.Speak("Proszę podać markę i rodzaj paliwa samochodu");
-                    sre.SpeechRecognized += Sre_SpeechRecognized_Brand_Fuel;
+                    ss.Speak("Proszę podać markę i rodzaj silnika samochodu");
+                    sre.SpeechRecognized += Sre_SpeechRecognized_Brand_Engine;
                 }
-                else if (fuel)
+                else if (engine)
                 {
-                    SetFuel(e);
+                    SetEngine(e);
                     sre.SpeechRecognized -= Sre_SpeechRecognized;
-                    ss.Speak("Proszę podać markę i rodzaj paliwa samochodu");
+                    ss.Speak("Proszę podać markę i rodzaj silnika samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Brand_Color;
                 }
             }
@@ -143,13 +143,13 @@ namespace Lab3
             }
         }
 
-        private void Sre_SpeechRecognized_Fuel(object sender, SpeechRecognizedEventArgs e)
+        private void Sre_SpeechRecognized_Engine(object sender, SpeechRecognizedEventArgs e)
         {
             float confidence = e.Result.Confidence;
             if (confidence > 0.7)
             {
-                SetFuel(e);
-                sre.SpeechRecognized -= Sre_SpeechRecognized_Fuel;
+                SetEngine(e);
+                sre.SpeechRecognized -= Sre_SpeechRecognized_Engine;
                 orderEnd(sre);
             }
             else
@@ -173,31 +173,31 @@ namespace Lab3
             }
         }
 
-        private void Sre_SpeechRecognized_Color_Fuel(object sender, SpeechRecognizedEventArgs e)
+        private void Sre_SpeechRecognized_Color_Engine(object sender, SpeechRecognizedEventArgs e)
         {
             float confidence = e.Result.Confidence;
             if (confidence > 0.7)
             {
                 bool color = e.Result.Semantics.ContainsKey("color");
-                bool fuel = e.Result.Semantics.ContainsKey("fuel");
-                if (e.Result.Semantics.ContainsKey("color") && e.Result.Semantics.ContainsKey("fuel"))
+                bool engine = e.Result.Semantics.ContainsKey("engine");
+                if (e.Result.Semantics.ContainsKey("color") && e.Result.Semantics.ContainsKey("engine"))
                 {
                     SetColor(e);
-                    SetFuel(e);
-                    sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Fuel;
+                    SetEngine(e);
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Engine;
                     orderEnd(sre);
                 }
                 else if (e.Result.Semantics.ContainsKey("color"))
                 {
                     SetColor(e);
-                    sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Fuel;
-                    ss.Speak("Proszę podać rodzaj paliwa samochodu");
-                    sre.SpeechRecognized += Sre_SpeechRecognized_Fuel;
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Engine;
+                    ss.Speak("Proszę podać rodzaj silnika samochodu");
+                    sre.SpeechRecognized += Sre_SpeechRecognized_Engine;
                 }
-                else if (e.Result.Semantics.ContainsKey("fuel"))
+                else if (e.Result.Semantics.ContainsKey("engine"))
                 {
-                    SetFuel(e);
-                    sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Fuel;
+                    SetEngine(e);
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Color_Engine;
                     ss.Speak("Proszę podać kolor samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Color;
                 }
@@ -243,31 +243,31 @@ namespace Lab3
             }
         }
 
-        private void Sre_SpeechRecognized_Brand_Fuel(object sender, SpeechRecognizedEventArgs e)
+        private void Sre_SpeechRecognized_Brand_Engine(object sender, SpeechRecognizedEventArgs e)
         {
             float confidence = e.Result.Confidence;
             if (confidence > 0.7)
             {
                 bool brand = e.Result.Semantics.ContainsKey("brand");
-                bool fuel = e.Result.Semantics.ContainsKey("fuel");
-                if (e.Result.Semantics.ContainsKey("brand") && e.Result.Semantics.ContainsKey("fuel"))
+                bool engine = e.Result.Semantics.ContainsKey("engine");
+                if (e.Result.Semantics.ContainsKey("brand") && e.Result.Semantics.ContainsKey("engine"))
                 {
                     SetBrand(e);
-                    SetFuel(e);
-                    sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Fuel;
+                    SetEngine(e);
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Engine;
                     orderEnd(sre);
                 }
                 else if (e.Result.Semantics.ContainsKey("brand"))
                 {
                     SetBrand(e);
-                    sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Fuel;
-                    ss.Speak("Proszę podać rodzaj paliwa samochodu");
-                    sre.SpeechRecognized += Sre_SpeechRecognized_Fuel;
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Engine;
+                    ss.Speak("Proszę podać rodzaj silnika samochodu");
+                    sre.SpeechRecognized += Sre_SpeechRecognized_Engine;
                 }
-                else if (e.Result.Semantics.ContainsKey("fuel"))
+                else if (e.Result.Semantics.ContainsKey("engine"))
                 {
-                    SetFuel(e);
-                    sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Fuel;
+                    SetEngine(e);
+                    sre.SpeechRecognized -= Sre_SpeechRecognized_Brand_Engine;
                     ss.Speak("Proszę podać markę samochodu");
                     sre.SpeechRecognized += Sre_SpeechRecognized_Brand;
                 }
@@ -305,11 +305,11 @@ namespace Lab3
             });
         }
 
-        private void SetFuel(SpeechRecognizedEventArgs e)
+        private void SetEngine(SpeechRecognizedEventArgs e)
         {
-            fuel = e.Result.Semantics["fuel"].Value.ToString();
+            engine = e.Result.Semantics["engine"].Value.ToString();
             Dispatcher.Invoke(() => {
-                fuel1.Text = fuel;
+                engine1.Text = engine;
             });
         }
 
@@ -318,9 +318,9 @@ namespace Lab3
             sre.UnloadAllGrammars();
             ss.Speak("Posiadam już wszystkie informacje.");
             Dispatcher.Invoke(() => {
-                wynik.Text = "Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + fuel + ".";
+                wynik.Text = "Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + engine + ".";
             });
-            ss.Speak("Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + fuel + ".");
+            ss.Speak("Wybrałeś " + brand + " o kolorze " + color + " z silnikiem " + engine + ".");
             Choices ch_yesno = new Choices();
             ch_yesno.Add("Tak");
             ch_yesno.Add("Nie");
@@ -332,7 +332,7 @@ namespace Lab3
             grammar1.Enabled = true;
             sre.LoadGrammarAsync(grammar1);*/
             sre.SpeechRecognized += Sre_SpeechRecognized_End;
-            ss.Speak("Czy Twoje zamówienie się zgadza? Tak czy nie?");
+            ss.Speak("Czy Twoje zamówienie się zgadza?");
         }
 
         private void Sre_SpeechRecognized_End(object sender, SpeechRecognizedEventArgs e)
