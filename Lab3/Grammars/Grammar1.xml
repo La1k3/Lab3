@@ -8,8 +8,8 @@ xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
 				<tag> out.brand=rules.latest(); </tag>
 				<ruleref uri="#color" />
 				<tag> out.color=rules.latest(); </tag>
-				<ruleref uri="#engine" />
-				<tag> out.engine=rules.latest(); </tag>
+				<ruleref uri="#fuel" />
+				<tag> out.fuel=rules.latest(); </tag>
 			</item>
 			<item>
 				<item repeat="0-1"> Chce </item>
@@ -22,15 +22,15 @@ xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
 				<item repeat="0-1"> Chce </item>
 				<ruleref uri="#color" />
 				<tag> out.color=rules.latest(); </tag>
-				<ruleref uri="#engine" />
-				<tag> out.engine=rules.latest(); </tag>
+				<ruleref uri="#fuel" />
+				<tag> out.fuel=rules.latest(); </tag>
 			</item>
 			<item>
 				<item repeat="0-1"> Chce </item>
 				<ruleref uri="#brand" />
 				<tag> out.brand=rules.latest(); </tag>
-				<ruleref uri="#engine" />
-				<tag> out.engine=rules.latest(); </tag>
+				<ruleref uri="#fuel" />
+				<tag> out.fuel=rules.latest(); </tag>
 			</item>
 			<item>
 				<item repeat="0-1"> Chce </item>
@@ -44,8 +44,8 @@ xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
 			</item>
 			<item>
 				<item repeat="0-1"> Chce </item>
-				<ruleref uri="#engine" />
-				<tag> out.engine=rules.latest(); </tag>
+				<ruleref uri="#fuel" />
+				<tag> out.fuel=rules.latest(); </tag>
 			</item>
 		</one-of>
 	</rule>
@@ -103,7 +103,7 @@ xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
 			</item>
 		</one-of>
 	</rule>
-	<rule id="engine">
+	<rule id="fuel">
 		<one-of>
 			<item>
 				benzyna <tag> out="benzyna";</tag>

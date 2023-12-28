@@ -5,21 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
-    <Grid Margin="0,-20,0,-95">
-        <Grid.Background>
-            <ImageBrush ImageSource="D:\WAT\Politechnika\Semestr 9\SWP\Laby\Lab3-auta\tlo1.jpg" Stretch="UniformToFill"/>
-        </Grid.Background>
-        <TextBox Name="brand1" HorizontalAlignment="Left" Height="26" Margin="355,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300"/>
-        <TextBox Name="color1" HorizontalAlignment="Left" Height="26" Margin="356,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300"/>
-        <TextBox Name="engine1" HorizontalAlignment="Left" Height="26" Margin="356,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300"/>
-        <Label Content="Marka" HorizontalAlignment="Left" Margin="355,29,0,0" VerticalAlignment="Top" Height="29" Width="45"/>
-        <Label Content="Kolor" HorizontalAlignment="Left" Margin="356,89,0,0" VerticalAlignment="Top" Height="29" Width="45"/>
-        <Label Content="Silnik" HorizontalAlignment="Left" Margin="355,153,0,0" VerticalAlignment="Top" Height="29" Width="45"/>
-        <TextBox Name="wynik" HorizontalAlignment="Left" Height="23" Margin="356,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="410"/>
-        <Label Content="Marki: &#xA;BMW &#xA;Audi&#xA;KIA&#xA;Subaru &#xA;Seat&#xA;Honda&#xA;Ford&#xA;Opel &#xA;Renault &#xA;Citroen" HorizontalAlignment="Left" Margin="31,72,0,0" VerticalAlignment="Top" Width="73" Height="217" FontSize="14"/>
-        <Label Content="Kolory: &#xA;czarny &#xA;biały &#xA;niebieski &#xA;zielony&#xA;żółty" HorizontalAlignment="Left" Margin="104,72,0,0" VerticalAlignment="Top" Height="127" FontSize="14"/>
-        <Label Content="Rodzaj silnika: &#xA;benzyna &#xA;diesel &#xA;elektryk &#xA;hybryda" HorizontalAlignment="Left" Margin="172,72,0,0" VerticalAlignment="Top" Height="106" FontSize="14"/>
-        <Label Content="AUTO KOMIS" HorizontalAlignment="Left" Margin="24,21,0,0" VerticalAlignment="Top" Height="52" Width="248" FontSize="32" FontFamily="Arial Black" IsEnabled="False" Background="{x:Null}"/>
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TextBox Name="brand1" HorizontalAlignment="Left" Height="23" Margin="10,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>
+        <TextBox Name="color1" HorizontalAlignment="Left" Height="23" Margin="10,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>
+        <TextBox Name="fuel1" HorizontalAlignment="Left" Height="23" Margin="10,192,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>
+        <Label Content="Marka" HorizontalAlignment="Left" Margin="48,20,0,0" VerticalAlignment="Top"/>
+        <Label Content="Kolor" HorizontalAlignment="Left" Margin="53,91,0,0" VerticalAlignment="Top"/>
+        <Label Content="Paliwo" HorizontalAlignment="Left" Margin="48,161,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="wynik" HorizontalAlignment="Left" Height="23" Margin="10,370,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="772"/>
+        <Label Content="Marki: BMW, audi, kia, subaru, seat,honda,ford, opel, renault, citroen." HorizontalAlignment="Left" Margin="292,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Kolory: czarny, biały, niebieski, zielony, żółty." HorizontalAlignment="Left" Margin="292,36,0,0" VerticalAlignment="Top"/>
+        <Label Content="Rodzaj silnika: benzyna, diesel, elektryk, hybryda." HorizontalAlignment="Left" Margin="292,67,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
